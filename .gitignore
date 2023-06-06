@@ -1,0 +1,5 @@
+.env
+_DS_store
+DS_store 
+virtualenv
+.DS_Store
