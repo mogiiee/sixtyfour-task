@@ -25,13 +25,19 @@ Handle error scenarios with appropriate status codes like 400, 402 500 for – 1
 Clone the project
 
 ```bash
-  git clone https://github.com/mogiiee/AI-planet.git
+  git clone https://github.com/mogiiee/sixtyfour-task.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd AI planet
+  cd sixtyfour-task
+```
+
+create a virtualenv
+
+```bash
+    python3 -m venv virtualenv
 ```
 
 Install dependencies
