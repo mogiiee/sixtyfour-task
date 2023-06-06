@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Depends
 from . import responses, models, database, ops
 from app.auth.jwt_handler import signJWT
 from app.auth.jwt_bearer import JWTBearer
@@ -25,14 +25,13 @@ async def greet():
     return {"hello ": "people from SixtyFour Data Intelligence LLP"}
 
 @app.post("/signup", tags=["auth"])
-async def signup(signup_details: models.User):
+async def signup(signup_details: models.UserSchema):
     infoDict = jsonable_encoder(signup_details)
     # print(infoDict)
     infoDict = dict(infoDict)
     # Checking if email already exists
-    email_count = database.user_collection.count_documents({"email": infoDict["email"]})
-    if email_count > 0:
-        return responses.response(False, "duplicated user, email already in use", None)
+    if database.user_collection.find_one({"email": infoDict["email"]}):
+        raise HTTPException(status_code=400, detail="User with this email already exists")
     # Insert new user
 
     encoded_password = ops.hash_password(str(infoDict["password"]))
@@ -41,3 +40,29 @@ async def signup(signup_details: models.User):
     json_signup_details = jsonable_encoder(infoDict)
     await ops.inserter(json_signup_details)
     return responses.response(True, "inserted", signJWT(infoDict))
+
+
+
+# @app.post("/user/authenticate")
+# def authenticate_user(user: UserAuthentication):
+#     existing_user = database.user_collection.find_one({"api_key": user.api_key})
+#     if existing_user:
+#         token = generate_token(existing_user["email"])
+#         return {"access_token": token}
+
+#     raise HTTPException(status_code=400, detail="Invalid API key")
+
+
+@app.get("/all-users",dependencies=[Depends(JWTBearer())],tags=["protected"])
+async def Get_all_data():
+    try:
+        
+        response = ops.get_all_data()
+        for x in response:
+            del x["_id"]
+        return responses.response(True, None, response)
+    except Exception as e:
+        return responses.response(
+            False, str(e), "something went wrong please try again"
+        )
+

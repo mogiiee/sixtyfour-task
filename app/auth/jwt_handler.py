@@ -8,7 +8,7 @@ JWT_ALGORITHM = config("algorithm")
 
 
 def token_response(token: str):
-    return response(True, token)
+    return response(True, token, None)
 
 
 def signJWT(userID: str):

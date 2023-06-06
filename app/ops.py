@@ -42,3 +42,8 @@ async def full_user_data(email):
 def get_all_data():
     response = database.user_collection.find({})
     return list(response)
+
+
+async def inserter(metadata: dict):
+    database.user_collection.insert_one(metadata)
+    return responses.response(True, "inserted successfully", metadata)

@@ -1,2 +1,2 @@
-def response(status, metadata):
-    return {"status": status, "metadata": metadata}
+def response(status, message: str ,metadata):
+    return {"status": status, "message": message,"metadata": metadata}

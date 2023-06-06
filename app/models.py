@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 class UserSchema(BaseModel):
@@ -8,4 +8,4 @@ class UserSchema(BaseModel):
     email: EmailStr 
     password: str 
     registeration_date = datetime.now()
-    
+    expiry_date = registeration_date + timedelta(days=365)

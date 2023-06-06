@@ -6,5 +6,5 @@ client = MongoClient(exporter.mongo_details)
 
 db = client[exporter.database]
 
-collection = db[exporter.collection]
+user_collection = db[exporter.collection]
 
